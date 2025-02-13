@@ -20,7 +20,7 @@ export async function sendMessage(userId, message) {
         return response.data;
     } catch (error) {
         console.error('儲存用戶資料失敗:', error);
-        // console.error('訊息推送失敗:', error.response ? error.response.data : error.message);
+        console.log(error, "lineMessaging.23");
         throw error;
     }
 }
