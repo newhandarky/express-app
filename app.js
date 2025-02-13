@@ -29,9 +29,9 @@ const port = process.env.PORT || "3000";
 
 console.log("前端路徑:", frontendPath);
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`app.js : Server is running on port ${port}`);
-});
+// app.listen(port, '0.0.0.0', () => {
+//   console.log(`app.js : Server is running on port ${port}`);
+// });
 
 
 
