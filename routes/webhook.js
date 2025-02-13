@@ -1,6 +1,10 @@
-const crypto = require('crypto');
-const express = require('express');
 
+import express from 'express';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
+
+import { sendMessage } from '../services/lineMessaging.js'; // 引入剛建立的模組
+dotenv.config();
 
 // 簽名驗證函數
 function validateSignature(channelSecret, body, signature) {
@@ -15,7 +19,6 @@ function validateSignature(channelSecret, body, signature) {
 const app = express();
 app.use(express.json());
 
-require('dotenv').config();
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
 
 app.post('/webhook', (req, res) => {
@@ -42,15 +45,14 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(2999, () => {
-    console.log('Server is running on port 2999');
+    console.log('Server is running on port 2999??');
 });
 
 
 // 測試傳送訊息給用戶
-const { sendMessage } = require('../services/lineMessaging'); // 引入剛建立的模組
-const router = express.Router();
+const webhookRouter = express.Router();
 
-router.post('/', express.json(), async (req, res) => {
+webhookRouter.post('/', express.json(), async (req, res) => {
     const events = req.body.events;
 
     for (const event of events) {
@@ -70,4 +72,4 @@ router.post('/', express.json(), async (req, res) => {
     res.status(200).send('OK');
 });
 
-module.exports = router;
+export default webhookRouter;

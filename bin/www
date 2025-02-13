@@ -4,15 +4,23 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('express-app:server');
-var http = require('http');
+// var app = require('../app');
+// var debug = require('debug')('express-app:server');
+// var http = require('http');
+
+import app from '../app.js'; // 匯入自定義的應用程式模組
+import createDebug from 'debug'; // 匯入 debug 套件
+import http from 'http'; // 匯入內建的 http 模組
+
+const debug = createDebug('express-app:server'); // 初始化 debug 實例
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '2999');
+// '0' 表示任何可用的端口
+var port = normalizePort(process.env.PORT || '0');
 app.set('port', port);
 
 /**

@@ -1,8 +1,11 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
 
-const CHANNEL_ACCESS_TOKEN = 'YOUR_CHANNEL_ACCESS_TOKEN'; // 替換為你的 Channel Access Token
+dotenv.config();
 
-async function sendMessage(userId, message) {
+const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN; // 替換為你的 Channel Access Token
+
+export async function sendMessage(userId, message) {
     try {
         const response = await axios.post(
             'https://api.line.me/v2/bot/message/push',
@@ -21,5 +24,3 @@ async function sendMessage(userId, message) {
         throw error;
     }
 }
-
-module.exports = { sendMessage };

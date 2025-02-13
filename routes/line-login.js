@@ -1,12 +1,9 @@
-const express = require('express');
-const axios = require('axios');
+import express from 'express';
+import axios from 'axios'; // 如果需要在這裡使用 axios
 
-const app = express();
-require('dotenv').config();
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-app.get('/line-login/callback', async (req, res) => {
+const lineLoginRouter = express.Router();
+
+lineLoginRouter.get('/callback', async (req, res) => {
     const { code, state } = req.query;
 
     try {
@@ -16,9 +13,9 @@ app.get('/line-login/callback', async (req, res) => {
             new URLSearchParams({
                 grant_type: 'authorization_code',
                 code,
-                redirect_uri: REDIRECT_URI,
-                client_id: CLIENT_ID,
-                client_secret: CLIENT_SECRET,
+                redirect_uri: process.env.REDIRECT_URI,
+                client_id: process.env.CLIENT_ID,
+                client_secret: process.env.CLIENT_SECRET,
             }),
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
@@ -37,6 +34,4 @@ app.get('/line-login/callback', async (req, res) => {
     }
 });
 
-app.listen(2999, () => {
-    console.log('Server is running on port 2999');
-});
+export default lineLoginRouter;
