@@ -86,7 +86,7 @@ app.use(function (err, req, res, next) {
   // 渲染錯誤頁面
   res.status(err.status || 500).json({ error: err.message });
   // res.status(err.status || 500);
-  res.render('error');
+  // res.render('error');
 });
 
 export default app;
