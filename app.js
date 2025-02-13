@@ -38,7 +38,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(frontendPath, 'public')));
+// app.use(express.static(path.join(frontendPath, 'public')));
 
 // 路由設定
 app.use('/', indexRouter);
@@ -73,6 +73,7 @@ app.post('/webhook', (req, res) => {
 
 // 捕捉未找到的路由（404）並轉發到錯誤處理器
 app.use(function (req, res, next) {
+  res.status(404).json({ error: 'Page not found' });
   next(createError(404));
 });
 
@@ -83,7 +84,8 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // 渲染錯誤頁面
-  res.status(err.status || 500);
+  res.status(err.status || 500).json({ error: err.message });
+  // res.status(err.status || 500);
   res.render('error');
 });
 
