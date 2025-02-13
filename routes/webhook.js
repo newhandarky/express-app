@@ -64,7 +64,7 @@ webhookRouter.post('/', express.json(), async (req, res) => {
 
             try {
                 // 回應用戶訊息
-                await sendMessage(userId, `你說的是：「${userMessage}」`);
+                await sendMessage(userId, `你說的是：「${userMessage}」, 從 Render 後端發送訊息測試`);
             } catch (error) {
                 console.error('回應用戶訊息失敗:', error);
             }
