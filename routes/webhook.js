@@ -3,8 +3,6 @@ import express from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 
-
-
 import { sendMessage } from '../services/lineMessaging.js'; // 引入剛建立的模組
 dotenv.config();
 
@@ -47,9 +45,7 @@ app.post('/webhook', (req, res) => {
     res.status(200).send('OK');
 });
 
-// app.listen(port, '0.0.0.0', () => {
-//     console.log(`webhook - Server is running on port ${port}`);
-// });
+
 
 // 測試傳送訊息給用戶
 const webhookRouter = express.Router();
@@ -72,6 +68,19 @@ webhookRouter.post('/', express.json(), async (req, res) => {
     }
 
     res.status(200).send('OK');
+});
+
+// 新增 /send-message 路由
+webhookRouter.post('/send-message', express.json(), async (req, res) => {
+    const { userId, message } = req.body;
+
+    try {
+        await sendMessage(userId, message);
+        res.status(200).send('訊息傳送成功');
+    } catch (error) {
+        console.error('傳送訊息失敗:', error);
+        res.status(500).send('傳送訊息失敗');
+    }
 });
 
 export default webhookRouter;
