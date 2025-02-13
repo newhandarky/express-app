@@ -26,7 +26,7 @@ const __dirname = path.dirname(__filename);
 // 從環境變數讀取前端路徑
 const frontendPath = path.resolve(__dirname, process.env.FRONTEND_PATH);
 
-// console.log("前端路徑:", frontendPath);
+console.log("前端路徑:", frontendPath);
 
 
 // view engine setup
