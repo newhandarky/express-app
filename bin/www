@@ -20,7 +20,7 @@ const debug = createDebug('express-app:server'); // 初始化 debug 實例
  */
 
 // '0' 表示任何可用的端口
-var port = normalizePort(process.env.PORT || '0');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**

@@ -22,7 +22,7 @@ const app = express();
 app.use(express.json());
 
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || "3000";
 
 app.post('/webhook', (req, res) => {
     const signature = req.headers['x-line-signature'];
@@ -47,10 +47,9 @@ app.post('/webhook', (req, res) => {
     res.status(200).send('OK');
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running on port ${port}`);
+});
 
 // 測試傳送訊息給用戶
 const webhookRouter = express.Router();
