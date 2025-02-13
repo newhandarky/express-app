@@ -78,6 +78,7 @@ function onError(error) {
       break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
+      console.error(error.code + '錯誤代碼');
       process.exit(1);
       break;
     default:
