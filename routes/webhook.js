@@ -3,6 +3,8 @@ import express from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 
+
+
 import { sendMessage } from '../services/lineMessaging.js'; // 引入剛建立的模組
 dotenv.config();
 
@@ -20,6 +22,7 @@ const app = express();
 app.use(express.json());
 
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
+const port = process.env.PORT || 4000;
 
 app.post('/webhook', (req, res) => {
     const signature = req.headers['x-line-signature'];
@@ -44,9 +47,9 @@ app.post('/webhook', (req, res) => {
     res.status(200).send('OK');
 });
 
-app.listen(2999, () => {
-    console.log('Server is running on port 2999??');
-});
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
 
 
 // 測試傳送訊息給用戶

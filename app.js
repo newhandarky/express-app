@@ -21,17 +21,17 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log(__dirname, "__dirname", __filename, "__filename"); // 現在可以正常使用 __dirname
+// console.log(__dirname, "__dirname", __filename, "__filename"); // 現在可以正常使用 __dirname
 
 // 從環境變數讀取前端路徑
 const frontendPath = path.resolve(__dirname, process.env.FRONTEND_PATH);
 
-console.log("前端路徑:", frontendPath);
+// console.log("前端路徑:", frontendPath);
 
 
 // view engine setup
-app.set('views', path.join(frontendPath, 'views'));
-app.set('view engine', 'ejs');
+// app.set('views', path.join(frontendPath, 'views'));
+// app.set('view engine', 'ejs');
 
 // 使用中介軟體
 app.use(logger('dev'));
