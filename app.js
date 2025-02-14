@@ -22,21 +22,22 @@ dotenv.config();
 const app = express();
 
 // 定義 __filename 和 __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 // console.log(__dirname, "__dirname", __filename, "__filename"); // 現在可以正常使用 __dirname
 
 // 從環境變數讀取前端路徑
-const frontendPath = path.resolve(__dirname, process.env.FRONTEND_PATH);
+// const frontendPath = path.resolve(__dirname, process.env.FRONTEND_PATH);
 
-console.log("前端路徑:", frontendPath);
+// console.log("前端路徑:", frontendPath);
 
 // 使用中介軟體
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 // 啟用 CORS，允許來自特定來源的請求
 app.use(cors({
   origin: 'https://testliff.onrender.com', // 允許的前端域名
@@ -81,7 +82,7 @@ app.get('/', (req, res) => {
 // });
 
 app.get('/hello', (req, res) => {
-  res.send('hello world');
+  res.send('hello world in App.js');
 });
 
 // 捕捉未找到的路由（404）並轉發到錯誤處理器
@@ -98,8 +99,8 @@ app.use(function (err, req, res, next) {
 
   // 渲染錯誤頁面
   res.status(err.status || 500).json({ error: err.message });
-  // res.status(err.status || 500);
-  // res.render('error');
+  res.status(err.status || 500);
+  res.render('error');
 
 });
 

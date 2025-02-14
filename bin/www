@@ -4,16 +4,11 @@
  * Module dependencies.
  */
 
-// var app = require('../app');
-// var debug = require('debug')('express-app:server');
-// var http = require('http');
-
 import app from '../app.js'; // 匯入自定義的應用程式模組
 import createDebug from 'debug'; // 匯入 debug 套件
 import http from 'http'; // 匯入內建的 http 模組
 
 const debug = createDebug('express-app:server'); // 初始化 debug 實例
-
 
 /**
  * Get port from environment and store in Express.
@@ -33,7 +28,7 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+// server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
