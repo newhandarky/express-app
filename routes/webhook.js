@@ -2,7 +2,7 @@
 import express from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-import cors from 'cors';
+
 
 import { sendMessage } from '../services/lineMessaging.js'; // 引入剛建立的模組
 dotenv.config();
@@ -19,13 +19,6 @@ function validateSignature(channelSecret, body, signature) {
 // 使用範例
 const app = express();
 app.use(express.json());
-
-// 啟用 CORS，允許來自特定來源的請求
-app.use(cors({
-    origin: 'https://testliff.onrender.com', // 允許的前端域名
-    methods: ['GET', 'POST'], // 允許的 HTTP 方法
-    allowedHeaders: ['Content-Type', 'Authorization'], // 允許的標頭
-}));
 
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
 const port = process.env.PORT || "4000";

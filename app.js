@@ -2,6 +2,7 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import fs from 'fs';
 import https from 'https';
@@ -36,6 +37,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// 啟用 CORS，允許來自特定來源的請求
+app.use(cors({
+  origin: 'https://testliff.onrender.com', // 允許的前端域名
+  methods: ['GET', 'POST'], // 允許的 HTTP 方法
+  allowedHeaders: ['Content-Type', 'Authorization'], // 允許的標頭
+}));
 // app.use(express.static(path.join(frontendPath, 'public')));
 
 // 路由設定
@@ -74,6 +81,8 @@ app.get('/', (req, res) => {
 // });
 
 app.get('/hello', (req, res) => {
+  console.log('Request received at /hello');
+
   res.send('hello world');
 });
 
