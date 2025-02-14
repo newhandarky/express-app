@@ -81,8 +81,6 @@ app.get('/', (req, res) => {
 // });
 
 app.get('/hello', (req, res) => {
-  console.log('Request received at /hello');
-
   res.send('hello world');
 });
 

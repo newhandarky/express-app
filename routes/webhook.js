@@ -46,6 +46,10 @@ app.post('/webhook', (req, res) => {
     res.status(200).send('OK');
 });
 
+app.get('/hello', (req, res) => {
+    res.send('hello world');
+});
+
 
 // 測試傳送訊息給用戶
 const webhookRouter = express.Router();
