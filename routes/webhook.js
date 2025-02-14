@@ -74,6 +74,25 @@ webhookRouter.post('/', express.json(), async (req, res) => {
     res.status(200).send('OK');
 });
 
+// GET 跌路
+webhookRouter.get('/', express.urlencoded({ extended: true }), async (req, res) => {
+    const events = req.query.events; // 如果(GET請求的事件數組在query參數中)
+
+    for (const event of events) {
+        if (event.type === 'message' && event.message.type === 'text') {
+            const userId = event.source.userId;
+            const userMessage = event.message.text;
+
+            try {
+                await sendMessage(userId, `你說的是：「${userMessage}」, 從 Render 後端發送訊息測試`);
+            } catch (error) {
+                console.error('回應用戶訊息失敗:', error);
+            }
+        }
+    }
+
+    res.status(200).send('OK');
+});
 
 
 export default webhookRouter;
