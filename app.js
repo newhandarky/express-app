@@ -4,11 +4,6 @@ import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import fs from 'fs';
-import https from 'https';
-
-import { fileURLToPath } from 'url';
-
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
@@ -17,20 +12,8 @@ import usersRouter from './routes/users.js';
 import lineLoginRouter from './routes/line-login.js';
 import webhookRouter from './routes/webhook.js';
 
-
 dotenv.config();
 const app = express();
-
-// 定義 __filename 和 __dirname
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// console.log(__dirname, "__dirname", __filename, "__filename"); // 現在可以正常使用 __dirname
-
-// 從環境變數讀取前端路徑
-// const frontendPath = path.resolve(__dirname, process.env.FRONTEND_PATH);
-
-// console.log("前端路徑:", frontendPath);
 
 // 使用中介軟體
 app.use(logger('dev'));
