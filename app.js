@@ -3,6 +3,9 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 
+import fs from 'fs';
+import https from 'https';
+
 import { fileURLToPath } from 'url';
 
 import cookieParser from 'cookie-parser';
@@ -25,7 +28,6 @@ const __dirname = path.dirname(__filename);
 
 // 從環境變數讀取前端路徑
 const frontendPath = path.resolve(__dirname, process.env.FRONTEND_PATH);
-const port = process.env.PORT || "3000";
 
 console.log("前端路徑:", frontendPath);
 
@@ -41,6 +43,11 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/webhook', webhookRouter);
 app.use('/line-login', lineLoginRouter);
+
+// 基本路由
+app.get('/', (req, res) => {
+  res.send('Hello, HTTPS!');
+});
 
 // 處理 LINE Webhook 的路由
 app.post('/webhook', (req, res) => {
@@ -65,7 +72,6 @@ app.post('/webhook', (req, res) => {
   // 無論是否有處理到具體事件，都回應 HTTP 200
   res.sendStatus(200);
 });
-
 
 // 捕捉未找到的路由（404）並轉發到錯誤處理器
 app.use(function (req, res, next) {

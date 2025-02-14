@@ -28,7 +28,7 @@ app.use(cors({
 }));
 
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
-const port = process.env.PORT || "3000";
+const port = process.env.PORT || "4000";
 
 app.post('/webhook', (req, res) => {
     const signature = req.headers['x-line-signature'];
@@ -52,8 +52,6 @@ app.post('/webhook', (req, res) => {
 
     res.status(200).send('OK');
 });
-
-
 
 // 測試傳送訊息給用戶
 const webhookRouter = express.Router();

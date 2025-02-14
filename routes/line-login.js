@@ -28,6 +28,8 @@ lineLoginRouter.get('/callback', async (req, res) => {
         });
 
         res.json(profileResponse.data);
+        console.log(profileResponse.data, "oauth2/v2.1/token回傳資料");
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Login failed');
