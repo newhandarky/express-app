@@ -50,27 +50,31 @@ app.get('/', (req, res) => {
 });
 
 // 處理 LINE Webhook 的路由
-app.post('/webhook', (req, res) => {
-  const body = req.body;
+// app.post('/webhook', (req, res) => {
+//   const body = req.body;
 
-  // 如果請求無效或沒有事件，也回傳 HTTP 200
-  if (!body || !body.events) {
-    console.log('Received an invalid request or no events.');
-    return res.sendStatus(200); // 回傳 HTTP 200 狀態碼
-  }
+//   // 如果請求無效或沒有事件，也回傳 HTTP 200
+//   if (!body || !body.events) {
+//     console.log('Received an invalid request or no events.');
+//     return res.sendStatus(200); // 回傳 HTTP 200 狀態碼
+//   }
 
-  // 處理事件
-  body.events.forEach((event) => {
-    console.log('Received event:', event);
+//   // 處理事件
+//   body.events.forEach((event) => {
+//     console.log('Received event:', event);
 
-    if (event.type === 'message') {
-      console.log('Message event received:', event.message);
-      // 根據需求處理訊息事件
-    }
-  });
+//     if (event.type === 'message') {
+//       console.log('Message event received:', event.message);
+//       // 根據需求處理訊息事件
+//     }
+//   });
 
-  // 無論是否有處理到具體事件，都回應 HTTP 200
-  res.sendStatus(200);
+//   // 無論是否有處理到具體事件，都回應 HTTP 200
+//   res.sendStatus(200);
+// });
+
+app.get('/hello', (req, res) => {
+  res.send('hello world');
 });
 
 // 捕捉未找到的路由（404）並轉發到錯誤處理器
