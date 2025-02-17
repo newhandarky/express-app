@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 
 
-import { sendMessage } from '../services/lineMessaging.js'; // 引入剛建立的模組
+import { sendMessage, getFollowers } from '../services/lineMessaging.js'; // 引入剛建立的模組
+import { log } from 'console';
 dotenv.config();
 
 // 簽名驗證函數
@@ -65,26 +66,51 @@ webhookRouter.get('/hello', (req, res) => {
     res.send('hello world in webhook');
 });
 
-// 測試自動回傳訊息給用戶
-webhookRouter.post('/', express.json(), async (req, res) => {
-    const events = req.body.events;
+webhookRouter.get('/get-followers', (req, res) => {
+    console.log(req, "成功呼叫？", res)
 
-    for (const event of events) {
-        if (event.type === 'message' && event.message.type === 'text') {
-            const userId = event.source.userId;
-            const userMessage = event.message.text;
-
-            try {
-                // 回應用戶訊息
-                await sendMessage(userId, `你說的是：「${userMessage}」, 從 Render 後端發送訊息測試`);
-            } catch (error) {
-                console.error('回應用戶訊息失敗:', error);
-            }
-        }
-    }
-
-    res.status(200).send('OK');
+    getFollowers()
+        .then(response => {
+            console.log('追隨者清單:', response);
+            res.status(200).send(JSON.stringify(response.data));
+        })
+        .catch(error => {
+            console.error('取得好友數量失敗, in webhook :', error);
+            res.status(500).send({ error: '取得好友數量失敗 in webhook' });
+        });
 });
+
+// 測試自動回傳訊息給用戶
+webhookRouter.post('/', async (req, res) => {
+    const response = await shareTarget("GGGGGG", true)
+        .then(function (res) {
+            res.status(200).send(response.data);
+        }).catch(function (err) {
+            console.log('失敗', err);
+
+        })
+
+});
+
+// webhookRouter.post('/share-target', express.json(), async (req, res) => {
+//     const events = req.body.events;
+
+//     for (const event of events) {
+//         if (event.type === 'message' && event.message.type === 'text') {
+//             const userId = event.source.userId;
+//             const userMessage = event.message.text;
+
+//             try {
+//                 // 回應用戶訊息
+//                 await sendMessage(userId, `你說的是：「${userMessage}」, 從 Render 後端發送訊息測試`);
+//             } catch (error) {
+//                 console.error('回應用戶訊息失敗:', error);
+//             }
+//         }
+//     }
+
+//     res.status(200).send('OK');
+// });
 
 // 主動發送訊息的 API 路由
 webhookRouter.post('/send-message', async (req, res) => {

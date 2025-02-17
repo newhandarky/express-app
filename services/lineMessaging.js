@@ -1,5 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import dayjs from 'dayjs';
+// import liff from '@line/liff';
 
 dotenv.config();
 
@@ -21,6 +23,19 @@ export async function sendMessage(userId, message) {
     } catch (error) {
         console.error('訊息推送失敗:', error);
         console.log(error, "lineMessaging.23");
+        throw error;
+    }
+}
+
+export async function getFollowers() {
+    try {
+        const response = await axios.get(
+            `https://api.line.me/v2/bot/insight/followers?date=${dayjs().format('YYYYMMDD')}`,
+            { headers: { Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}` } }
+        );
+        return response;
+    } catch (error) {
+        // console.error('獲取追隨者失敗:', error);
         throw error;
     }
 }
