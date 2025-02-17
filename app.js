@@ -12,6 +12,8 @@ import usersRouter from './routes/users.js';
 import lineLoginRouter from './routes/line-login.js';
 import webhookRouter from './routes/webhook.js';
 
+
+
 dotenv.config();
 const app = express();
 
@@ -23,14 +25,14 @@ app.use(cookieParser());
 
 // 啟用 CORS，允許來自特定來源的請求
 app.use(cors({
-  origin: 'https://testliff.onrender.com', // 允許的前端域名
+  origin: process.env.CROS_URL, // 允許的前端域名
   methods: ['GET', 'POST'], // 允許的 HTTP 方法
   allowedHeaders: ['Content-Type', 'Authorization'], // 允許的標頭
 }));
 // app.use(express.static(path.join(frontendPath, 'public')));
 
 // 路由設定
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/webhook', webhookRouter);
 app.use('/line-login', lineLoginRouter);
@@ -40,32 +42,12 @@ app.get('/', (req, res) => {
   res.send('Hello, HTTPS!');
 });
 
-// 處理 LINE Webhook 的路由
-// app.post('/webhook', (req, res) => {
-//   const body = req.body;
-
-//   // 如果請求無效或沒有事件，也回傳 HTTP 200
-//   if (!body || !body.events) {
-//     console.log('Received an invalid request or no events.');
-//     return res.sendStatus(200); // 回傳 HTTP 200 狀態碼
-//   }
-
-//   // 處理事件
-//   body.events.forEach((event) => {
-//     console.log('Received event:', event);
-
-//     if (event.type === 'message') {
-//       console.log('Message event received:', event.message);
-//       // 根據需求處理訊息事件
-//     }
-//   });
-
-//   // 無論是否有處理到具體事件，都回應 HTTP 200
-//   res.sendStatus(200);
-// });
-
 app.get('/hello', (req, res) => {
   res.send('hello world in App.js');
+  console.log("測試頁面導向");
+  res.redirect('http://localhost:5173/')
+  console.log("導向失敗");
+
 });
 
 // 捕捉未找到的路由（404）並轉發到錯誤處理器

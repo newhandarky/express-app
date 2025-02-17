@@ -21,7 +21,7 @@ const app = express();
 app.use(express.json());
 
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
-const port = process.env.PORT || "4000";
+// const port = process.env.PORT || "4000";
 
 app.post('/webhook', (req, res) => {
     const signature = req.headers['x-line-signature'];
