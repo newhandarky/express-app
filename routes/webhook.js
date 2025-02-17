@@ -21,6 +21,8 @@ const app = express();
 app.use(express.json());
 
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
+const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
+
 // const port = process.env.PORT || "4000";
 
 app.post('/webhook', (req, res) => {
@@ -51,7 +53,7 @@ app.get('/hello', (req, res) => {
 });
 
 
-// 測試傳送訊息給用戶
+// 測試自動回傳訊息給用戶
 const webhookRouter = express.Router();
 
 webhookRouter.post('/', express.json(), async (req, res) => {
@@ -74,25 +76,53 @@ webhookRouter.post('/', express.json(), async (req, res) => {
     res.status(200).send('OK');
 });
 
-// GET 跌路
-webhookRouter.get('/', express.urlencoded({ extended: true }), async (req, res) => {
-    const events = req.query.events; // 如果(GET請求的事件數組在query參數中)
+// 主動發送訊息的 API 路由
+app.post('/send-message', async (req, res) => {
+    const { userId, message } = req.body;
 
-    for (const event of events) {
-        if (event.type === 'message' && event.message.type === 'text') {
-            const userId = event.source.userId;
-            const userMessage = event.message.text;
-
-            try {
-                await sendMessage(userId, `你說的是：「${userMessage}」, 從 Render 後端發送訊息測試`);
-            } catch (error) {
-                console.error('回應用戶訊息失敗:', error);
-            }
-        }
+    if (!userId || !message) {
+        return res.status(400).send('缺少 userId 或 message');
     }
 
-    res.status(200).send('OK');
+    try {
+        // 發送 Push Message 的請求
+        const response = await axios.post(
+            'https://api.line.me/v2/bot/message/push',
+            {
+                to: userId,
+                messages: [
+                    {
+                        type: 'text',
+                        text: message,
+                    },
+                ],
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}`,
+                },
+            }
+        );
+
+        console.log('訊息發送成功:', response.data);
+        res.status(200).send('訊息已成功發送');
+    } catch (error) {
+        console.error('發送訊息失敗:', error.response?.data || error.message);
+        res.status(500).send('發送訊息失敗');
+    }
 });
 
+
+// GET 跌路
+webhookRouter.get('/', async (req, res) => {
+    try {
+        // 測試回傳訊息
+        res.status(200).send('Webhook 路由測試成功！！！');
+    } catch (error) {
+        console.error('處理 /webhook/ 請求時發生錯誤:', error);
+        res.status(500).send('伺服器錯誤');
+    }
+});
 
 export default webhookRouter;
