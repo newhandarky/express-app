@@ -2,6 +2,7 @@
 import express from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import axios from 'axios';
 
 
 import { sendMessage } from '../services/lineMessaging.js'; // 引入剛建立的模組
@@ -23,7 +24,6 @@ app.use(express.json());
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
 const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 
-// const port = process.env.PORT || "4000";
 
 app.post('/webhook', (req, res) => {
     const signature = req.headers['x-line-signature'];
@@ -50,6 +50,16 @@ app.post('/webhook', (req, res) => {
 
 
 const webhookRouter = express.Router();
+
+webhookRouter.get('/', async (req, res) => {
+    try {
+        // 測試回傳訊息
+        res.status(200).send('Webhook 路由測試成功！！！');
+    } catch (error) {
+        console.error('處理 /webhook/ 請求時發生錯誤:', error);
+        res.status(500).send('伺服器錯誤');
+    }
+});
 
 webhookRouter.get('/hello', (req, res) => {
     res.send('hello world in webhook');
@@ -110,18 +120,6 @@ webhookRouter.post('/send-message', async (req, res) => {
     } catch (error) {
         console.error('發送訊息失敗:', error.response?.data || error.message);
         res.status(500).send('發送訊息失敗');
-    }
-});
-
-
-// GET 跌路
-webhookRouter.get('/', async (req, res) => {
-    try {
-        // 測試回傳訊息
-        res.status(200).send('Webhook 路由測試成功！！！');
-    } catch (error) {
-        console.error('處理 /webhook/ 請求時發生錯誤:', error);
-        res.status(500).send('伺服器錯誤');
     }
 });
 
