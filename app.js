@@ -44,10 +44,9 @@ app.get('/', (req, res) => {
 
 app.get('/hello', (req, res) => {
   res.send('hello world in App.js');
-  console.log("測試頁面導向");
-  res.redirect('http://localhost:5173/')
-  console.log("導向失敗");
-
+  // console.log("測試頁面導向");
+  // res.redirect('http://localhost:5173/')
+  // console.log("導向失敗");
 });
 
 // 捕捉未找到的路由（404）並轉發到錯誤處理器
