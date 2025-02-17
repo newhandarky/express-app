@@ -48,14 +48,14 @@ app.post('/webhook', (req, res) => {
     res.status(200).send('OK');
 });
 
-app.get('/hello', (req, res) => {
+
+const webhookRouter = express.Router();
+
+webhookRouter.get('/hello', (req, res) => {
     res.send('hello world in webhook');
 });
 
-
 // 測試自動回傳訊息給用戶
-const webhookRouter = express.Router();
-
 webhookRouter.post('/', express.json(), async (req, res) => {
     const events = req.body.events;
 
@@ -77,7 +77,7 @@ webhookRouter.post('/', express.json(), async (req, res) => {
 });
 
 // 主動發送訊息的 API 路由
-app.post('/send-message', async (req, res) => {
+webhookRouter.post('/send-message', async (req, res) => {
     const { userId, message } = req.body;
 
     if (!userId || !message) {
