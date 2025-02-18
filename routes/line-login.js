@@ -7,11 +7,13 @@ const lineLoginRouter = express.Router();
 
 
 lineLoginRouter.get('/callback', async (req, res) => {
-    req.session.state = state; // 存儲在 Session 中
     console.log("成功呼叫？");
 
+    const state = crypto.randomBytes(16).toString('hex');
+    req.session.state = state; // 存儲在 Session 中
+
     // 後端在處理 Callback 請求時，從查詢參數中提取 code
-    const { code, state } = req.query;
+    const { code } = req.query;
 
     try {
         // 用授權碼交換 Access Token
@@ -39,7 +41,7 @@ lineLoginRouter.get('/callback', async (req, res) => {
         console.log(profileResponse.data, "oauth2/v2.1/token回傳資料");
 
     } catch (error) {
-        console.error(error);
+        console.error(error, 'callback 呼叫失敗');
         res.status(500).send('Login failed');
     }
 });
