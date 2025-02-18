@@ -1,9 +1,17 @@
 import express from 'express';
 import axios from 'axios'; // 如果需要在這裡使用 axios
+import crypto from 'crypto';
+// import jwt from 'jsonwebtoken';
 
 const lineLoginRouter = express.Router();
 
+const state = crypto.randomBytes(16).toString('hex');
+req.session.state = state; // 存儲在 Session 中
+
 lineLoginRouter.get('/callback', async (req, res) => {
+    console.log("成功呼叫？");
+
+    // 後端在處理 Callback 請求時，從查詢參數中提取 code
     const { code, state } = req.query;
 
     try {
@@ -14,8 +22,9 @@ lineLoginRouter.get('/callback', async (req, res) => {
                 grant_type: 'authorization_code',
                 code,
                 redirect_uri: process.env.REDIRECT_URI,
-                client_id: process.env.CLIENT_ID,
-                client_secret: process.env.CLIENT_SECRET,
+                client_id: process.env.LINE_LOGIN_CHANNEL_ID,
+                client_secret: process.env.CHANNEL_SECRET,
+                state
             }),
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
