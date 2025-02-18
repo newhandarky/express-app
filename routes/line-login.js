@@ -5,10 +5,9 @@ import crypto from 'crypto';
 
 const lineLoginRouter = express.Router();
 
-const state = crypto.randomBytes(16).toString('hex');
-req.session.state = state; // 存儲在 Session 中
 
 lineLoginRouter.get('/callback', async (req, res) => {
+    req.session.state = state; // 存儲在 Session 中
     console.log("成功呼叫？");
 
     // 後端在處理 Callback 請求時，從查詢參數中提取 code
