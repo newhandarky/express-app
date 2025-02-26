@@ -92,25 +92,28 @@ webhookRouter.post('/', async (req, res) => {
 
 });
 
-// webhookRouter.post('/share-target', express.json(), async (req, res) => {
-//     const events = req.body.events;
+webhookRouter.post('/send-flex-message', async (req, res) => {
+    try {
+        const response = await axios.post(
+            'https://api.line.me/v2/bot/message/push',
+            // ... 保持原有的 Flex Message JSON 結構不變 ...
+            // (此處內容與之前範例完全一致，為節省篇幅省略)
+            flexMessage,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+                }
+            }
+        );
+        console.log('卡片形訊息發送結果:', response.data);
+        res.status(200).send('Flex Message 發送成功');
+    } catch (error) {
+        console.error('錯誤:', error.response?.data || error.message);
+        res.status(500).send('發送失敗');
+    }
+});
 
-//     for (const event of events) {
-//         if (event.type === 'message' && event.message.type === 'text') {
-//             const userId = event.source.userId;
-//             const userMessage = event.message.text;
-
-//             try {
-//                 // 回應用戶訊息
-//                 await sendMessage(userId, `你說的是：「${userMessage}」, 從 Render 後端發送訊息測試`);
-//             } catch (error) {
-//                 console.error('回應用戶訊息失敗:', error);
-//             }
-//         }
-//     }
-
-//     res.status(200).send('OK');
-// });
 
 // 主動發送訊息的 API 路由
 webhookRouter.post('/send-message', async (req, res) => {

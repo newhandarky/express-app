@@ -1,40 +1,14 @@
+import express from 'express';
 import axios from 'axios';
-import dotenv from 'dotenv';
-import dayjs from 'dayjs';
-// import liff from '@line/liff';
 
-dotenv.config();
+const app = express();
+app.use(express.json());
 
-const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN; // 替換為你的 Channel Access Token
+// 請替換以下變數
+const CHANNEL_ACCESS_TOKEN = 'YOUR_CHANNEL_ACCESS_TOKEN';
+const TARGET_USER_ID = 'TARGET_USER_ID';
 
-// 發送樣板語言
-const messageTemplate = {
-    "type": "template",
-    "altText": "This is a buttons template",
-    "template": {
-        "type": "buttons",
-        "thumbnailImageUrl": "https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2024/03/21/0/29251088.jpg&s=Y&x=0&y=0&sw=940&sh=627&exp=3600",
-        "imageAspectRatio": "rectangle",
-        "imageSize": "cover",
-        "imageBackgroundColor": "#FFFFFF",
-        "title": "Menu",
-        "text": "Please select",
-        "defaultAction": {
-            "type": "uri",
-            "label": "View detail",
-            "uri": "https://testliff.onrender.com"
-        },
-        "actions": [
-            {
-                "type": "uri",
-                "label": "View detail",
-                "uri": "https://testliff.onrender.com"
-            }
-        ]
-    }
-}
-
-const templateMessage = {
+const flexMessage = {
     "type": "bubble",
     "hero": {
         "type": "image",
@@ -175,37 +149,31 @@ const templateMessage = {
         ],
         "flex": 0
     }
-}
+};
 
-export async function sendMessage(userId, message) {
+app.post('/send-flex-message', async (req, res) => {
     try {
         const response = await axios.post(
             'https://api.line.me/v2/bot/message/push',
+            // ... 保持原有的 Flex Message JSON 結構不變 ...
+            // (此處內容與之前範例完全一致，為節省篇幅省略)
+            flexMessage,
             {
-                to: userId,
-                messages: [{ type: 'text', text: message }, templateMessage],
-            },
-            { headers: { Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}` } }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+                }
+            }
         );
-
-        console.log('訊息推送成功:', response.data);
-        return response.data;
+        console.log('卡片形訊息發送結果:', response.data);
+        res.status(200).send('Flex Message 發送成功');
     } catch (error) {
-        console.error('訊息推送失敗:', error);
-        console.log(error, "lineMessaging.23");
-        throw error;
+        console.error('錯誤:', error.response?.data || error.message);
+        res.status(500).send('發送失敗');
     }
-}
+});
 
-export async function getFollowers() {
-    try {
-        const response = await axios.get(
-            `https://api.line.me/v2/bot/insight/followers?date=${dayjs().format('YYYYMMDD')}`,
-            { headers: { Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}` } }
-        );
-        return response;
-    } catch (error) {
-        // console.error('獲取追隨者失敗:', error);
-        throw error;
-    }
-}
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
