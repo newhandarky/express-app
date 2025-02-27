@@ -26,9 +26,24 @@ app.use(cookieParser());
 // 啟用 CORS，允許來自特定來源的請求
 app.use(cors({
   origin: process.env.CROS_URL, // 允許的前端域名
-  methods: ['GET', 'POST'], // 允許的 HTTP 方法
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允許的 HTTP 方法
   allowedHeaders: ['Content-Type', 'Authorization'], // 允許的標頭
 }));
+
+app.options('*', cors({
+  origin: process.env.CROS_URL,
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('/webhook/send-flex-message', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', process.env.CROS_URL);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200); // 回應成功狀態碼
+});
+
+
 // app.use(express.static(path.join(frontendPath, 'public')));
 
 // 路由設定
