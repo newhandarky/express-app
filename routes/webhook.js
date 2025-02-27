@@ -25,7 +25,6 @@ app.use(express.json());
 const CHANNEL_SECRET = process.env.CHANNEL_SECRET;
 const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 
-
 app.post('/webhook', (req, res) => {
     const signature = req.headers['x-line-signature'];
     const body = JSON.stringify(req.body);
@@ -92,7 +91,14 @@ webhookRouter.post('/', async (req, res) => {
 
 });
 
+
 webhookRouter.post('/send-flex-message', async (req, res) => {
+    const { userId, defaultMessage } = req.body;
+    // 定義 Flex Message 結構
+    const flexMessage = {
+        to: userId, // 接收者 ID
+        defaultMessage
+    };
     try {
         const response = await axios.post(
             'https://api.line.me/v2/bot/message/push',
@@ -106,11 +112,12 @@ webhookRouter.post('/send-flex-message', async (req, res) => {
                 }
             }
         );
-        console.log('卡片形訊息發送結果:', response.data);
+        console.log("userId", userId),
+            console.log('卡片形訊息發送結果:', response.data);
         res.status(200).send('Flex Message 發送成功');
     } catch (error) {
         console.error('錯誤:', error.response?.data || error.message);
-        res.status(500).send('發送失敗');
+        res.status(500).send('發送失敗:', error.response?.data || error.message);
     }
 });
 
