@@ -94,6 +94,9 @@ webhookRouter.post('/', async (req, res) => {
 
 webhookRouter.post('/send-flex-message', async (req, res) => {
     const { userId, defaultMessage } = req.body;
+    console.log("userId", userId, defaultMessage);
+
+
     // 定義 Flex Message 結構
     const flexMessage = {
         to: userId, // 接收者 ID
